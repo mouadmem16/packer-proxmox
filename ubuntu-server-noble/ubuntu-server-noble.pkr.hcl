@@ -40,7 +40,7 @@ source "proxmox-iso" "ubuntu-server-noble" {
     # (Option 1) Local ISO File
     boot_iso {
         type         = "scsi"
-        iso_file     = "workload:iso/noble-mini-iso-amd64.iso"
+        iso_file     = "workload:iso/ubuntu-22.04.5-live-server-amd64.iso"
         unmount      = true
         # iso_checksum = "e240e4b801f7bb68c20d1356b60968ad0c33a41d00d828e74ceb3364a0317be9"
     }
