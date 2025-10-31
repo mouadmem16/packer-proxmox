@@ -32,7 +32,7 @@ source "proxmox-iso" "ubuntu-server-jammy" {
 
     # VM General Settings
     node                 = "proxmox"
-    vm_id                = "400"
+    vm_id                = "401"
     vm_name              = "ubuntu-server-jammy"
     template_description = "Ubuntu Server Jammy Image"
 
