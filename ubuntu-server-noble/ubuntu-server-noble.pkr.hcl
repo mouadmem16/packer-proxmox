@@ -60,8 +60,8 @@ source "proxmox-iso" "ubuntu-server-noble" {
     scsi_controller = "virtio-scsi-pci"
 
     disks {
-        disk_size         = "25G"
-        format            = "qcow2"
+        disk_size         = "10G"
+        format            = "raw"
         storage_pool      = "${local.disk_storage}"
         type              = "virtio"
     }
