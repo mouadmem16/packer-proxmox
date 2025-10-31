@@ -62,7 +62,7 @@ source "proxmox-iso" "ubuntu-server-noble" {
     disks {
         disk_size         = "25G"
         format            = "qcow2"
-        storage_pool      = ${local.disk_storage}
+        storage_pool      = "${local.disk_storage}"
         type              = "virtio"
     }
 
@@ -81,7 +81,7 @@ source "proxmox-iso" "ubuntu-server-noble" {
 
     # VM Cloud-Init Settings
     cloud_init              = true
-    cloud_init_storage_pool = ${local.disk_storage}
+    cloud_init_storage_pool = "${local.disk_storage}"
 
     # PACKER Boot Commands
     boot         = "c"
