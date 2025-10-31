@@ -17,7 +17,7 @@ variable "proxmox_api_token_secret" {
 }
 
 locals {
-    disk_storage = "local-lvm"
+    disk_storage = "data"
 }
 
 # Resource Definiation for the VM Template
@@ -28,7 +28,7 @@ source "proxmox-iso" "ubuntu-server-noble" {
     username    = "${var.proxmox_api_token_id}"
     token       = "${var.proxmox_api_token_secret}"
     # (Optional) Skip TLS Verification
-    # insecure_skip_tls_verify = true
+    insecure_skip_tls_verify = true
 
     # VM General Settings
     node                 = "your-proxmox-node"
@@ -38,12 +38,12 @@ source "proxmox-iso" "ubuntu-server-noble" {
 
     # VM OS Settings
     # (Option 1) Local ISO File
-    # boot_iso {
-    #     type         = "scsi"
-    #     iso_file     = "local:iso/ubuntu-24.04-live-server-amd64.iso"
-    #     unmount      = true
-    #     iso_checksum = "e240e4b801f7bb68c20d1356b60968ad0c33a41d00d828e74ceb3364a0317be9"
-    # }
+    boot_iso {
+        type         = "scsi"
+        iso_file     = "workload:iso/noble-mini-iso-amd64.iso"
+        unmount      = true
+        # iso_checksum = "e240e4b801f7bb68c20d1356b60968ad0c33a41d00d828e74ceb3364a0317be9"
+    }
     # (Option 2) Download ISO
     # boot_iso {
     #     type             = "scsi"
@@ -67,10 +67,10 @@ source "proxmox-iso" "ubuntu-server-noble" {
     }
 
     # VM CPU Settings
-    cores = "1"
+    cores = "4"
 
     # VM Memory Settings
-    memory = "2048"
+    memory = "4096"
 
     # VM Network Settings
     network_adapters {
@@ -108,7 +108,7 @@ source "proxmox-iso" "ubuntu-server-noble" {
     # http_port_min           = 8802
     # http_port_max           = 8802
 
-    ssh_username            = "your-user-name"
+    ssh_username            = "puser"
 
     # (Option 1) Add your Password here
     # ssh_password        = "your-password"
