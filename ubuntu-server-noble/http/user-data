@@ -22,7 +22,7 @@ autoinstall:
     package_upgrade: false
     timezone: africa/casablanca
     users:
-      - name: puser
+      - name: user
         groups: [adm, sudo]
         lock-passwd: false
         sudo: ALL=(ALL) NOPASSWD:ALL

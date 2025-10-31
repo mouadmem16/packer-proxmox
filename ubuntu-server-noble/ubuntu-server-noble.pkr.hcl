@@ -108,7 +108,7 @@ source "proxmox-iso" "ubuntu-server-noble" {
     # http_port_min           = 8802
     # http_port_max           = 8802
 
-    ssh_username            = "puser"
+    ssh_username            = "user"
 
     # (Option 1) Add your Password here
     ssh_password        = "root"
