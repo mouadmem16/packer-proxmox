@@ -31,8 +31,8 @@ source "proxmox-iso" "ubuntu-server-noble" {
     insecure_skip_tls_verify = true
 
     # VM General Settings
-    node                 = "your-proxmox-node"
-    vm_id                = "100"
+    node                 = "proxmox"
+    vm_id                = "400"
     vm_name              = "ubuntu-server-noble"
     template_description = "Ubuntu Server Noble Image"
 
