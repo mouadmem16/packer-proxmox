@@ -21,7 +21,7 @@ locals {
 }
 
 # Resource Definiation for the VM Template
-source "proxmox-iso" "ubuntu-server-jammy" {
+source "proxmox-iso" "ubuntu-server-jammy-docker" {
 
     # Proxmox Connection Settings
     proxmox_url = "${var.proxmox_api_url}"
@@ -33,8 +33,8 @@ source "proxmox-iso" "ubuntu-server-jammy" {
     # VM General Settings
     node                 = "proxmox"
     vm_id                = "401"
-    vm_name              = "ubuntu-server-jammy"
-    template_description = "Ubuntu Server Jammy Image"
+    vm_name              = "ubuntu-server-jammy-docker"
+    template_description = "Ubuntu Server Jammy Image with Docker"
 
     # VM OS Settings
     # (Option 1) Local ISO File
@@ -124,8 +124,8 @@ source "proxmox-iso" "ubuntu-server-jammy" {
 # Build Definition to create the VM Template
 build {
 
-    name    = "ubuntu-server-jammy"
-    sources = ["source.proxmox-iso.ubuntu-server-jammy"]
+    name    = "ubuntu-server-jammy-docker"
+    sources = ["source.proxmox-iso.ubuntu-server-jammy-docker"]
 
     # Provisioning the VM Template for Cloud-Init Integration in Proxmox #1
     provisioner "shell" {
