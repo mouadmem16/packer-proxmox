@@ -32,9 +32,9 @@ source "proxmox-iso" "debian-server-trixie" {
 
     # VM General Settings
     node                 = "proxmox"
-    vm_id                = "402"
+    vm_id                = "403"
     vm_name              = "debian-server-trixie"
-    template_description = "Ubuntu Server Jammy Image"
+    template_description = "Debian Server Trixie Image"
 
     # VM OS Settings
     # (Option 1) Local ISO File
