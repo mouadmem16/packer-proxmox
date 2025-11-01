@@ -1,6 +1,6 @@
-# Ubuntu Server Focal
+# Debian Server Trixie (13.1.x)
 # ---
-# Packer Template to create an Ubuntu Server (Focal) on Proxmox
+# Packer Template to create an Debian Trixie (Trixie 13.1.x) on Proxmox
 
 # Variable Definitions
 variable "proxmox_api_url" {
@@ -17,40 +17,40 @@ variable "proxmox_api_token_secret" {
 }
 
 locals {
-    disk_storage = "local-lvm"
+    disk_storage = "data"
 }
 
 # Resource Definiation for the VM Template
-source "proxmox" "ubuntu-server-focal" {
+source "proxmox-iso" "debian-server-trixie" {
 
     # Proxmox Connection Settings
     proxmox_url = "${var.proxmox_api_url}"
     username    = "${var.proxmox_api_token_id}"
     token       = "${var.proxmox_api_token_secret}"
     # (Optional) Skip TLS Verification
-    # insecure_skip_tls_verify = true
+    insecure_skip_tls_verify = true
 
     # VM General Settings
-    node                 = "your-proxmox-node"
-    vm_id                = "100"
-    vm_name              = "ubuntu-server-focal"
-    template_description = "Ubuntu Server Focal Image"
+    node                 = "proxmox"
+    vm_id                = "402"
+    vm_name              = "debian-server-trixie"
+    template_description = "Ubuntu Server Jammy Image"
 
     # VM OS Settings
     # (Option 1) Local ISO File
-    # boot_iso {
-    #     type         = "scsi"
-    #     iso_file     = "local:iso/ubuntu-20.04.2-live-server-amd64.iso"
-    #     unmount      = true
-    #     iso_checksum = "f8e3086f3cea0fb3fefb29937ab5ed9d19e767079633960ccb50e76153effc98"
-    # }
+    boot_iso {
+        type         = "scsi"
+        iso_file     = "workload:iso/debian-13.1.0-amd64-netinst.iso"
+        unmount      = true
+        # iso_checksum = "e240e4b801f7bb68c20d1356b60968ad0c33a41d00d828e74ceb3364a0317be9"
+    }
     # (Option 2) Download ISO
     # boot_iso {
     #     type             = "scsi"
-    #     iso_url          = "https://releases.ubuntu.com/20.04/ubuntu-20.04.3-live-server-amd64.iso"
+    #     iso_url          = "https://releases.ubuntu.com/24.04/ubuntu-24.04-live-server-amd64.iso"
     #     unmount          = true
     #     iso_storage_pool = "local"
-    #     iso_checksum     = "file:https://releases.ubuntu.com/focal/SHA256SUMS"
+    #     iso_checksum     = "file:https://releases.ubuntu.com/jammy/SHA256SUMS"
     # }
 
     # VM System Settings
@@ -60,17 +60,17 @@ source "proxmox" "ubuntu-server-focal" {
     scsi_controller = "virtio-scsi-pci"
 
     disks {
-        disk_size         = "25G"
-        format            = "qcow2"
-        storage_pool      = ${local.disk_storage}
+        disk_size         = "10G"
+        format            = "raw"
+        storage_pool      = "${local.disk_storage}"
         type              = "virtio"
     }
 
     # VM CPU Settings
-    cores = "1"
+    cores = "4"
 
     # VM Memory Settings
-    memory = "2048"
+    memory = "4096"
 
     # VM Network Settings
     network_adapters {
@@ -81,46 +81,50 @@ source "proxmox" "ubuntu-server-focal" {
 
     # VM Cloud-Init Settings
     cloud_init              = true
-    cloud_init_storage_pool = ${local.disk_storage}
+    cloud_init_storage_pool = "${local.disk_storage}"
 
     # PACKER Boot Commands
     boot         = "c"
-    boot_wait    = "5s"
+    boot_wait    = "10s"
+    communicator = "ssh"
     boot_command = [
-        "<esc><wait><esc><wait>",
-        "<f6><wait><esc><wait>",
-        "<bs><bs><bs><bs><bs>",
-        "autoinstall ds=nocloud-net;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ ",
-        "--- <enter>"
+        "c<wait>",
+        "linux /install.amd/vmlinuz auto-install/enable=true priority=critical ",
+        "DEBIAN_FRONTEND=text preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ noprompt<enter>",
+        "initrd /install.amd/initrd.gz<enter>",
+        "boot<enter>"
     ]
     # Useful for debugging
     # Sometimes lag will require this
     # boot_key_interval = "500ms"
 
-    # PACKER Autoinstall Settings
-    http_directory = "http"
-    # (Optional) Bind IP Address and Port
-    # http_bind_address = "0.0.0.0"
-    # http_port_min     = 8802
-    # http_port_max     = 8802
 
-    ssh_username = "your-user-name"
+    # PACKER Autoinstall Settings
+    http_directory          = "http"
+
+    # (Optional) Bind IP Address and Port
+    # http_bind_address       = "0.0.0.0"
+    # http_port_min           = 8802
+    # http_port_max           = 8802
+
+    ssh_username            = "user"
 
     # (Option 1) Add your Password here
-    # ssh_password = "your-password"
+    # ssh_password        = "password"
     # - or -
     # (Option 2) Add your Private SSH KEY file here
-    # ssh_private_key_file = "~/.ssh/id_rsa"
+    ssh_private_key_file    = "~/.ssh/id_rsa"
 
     # Raise the timeout, when installation takes longer
-    ssh_timeout = "20m"
+    ssh_timeout             = "30m"
+    ssh_pty                 = true
 }
 
 # Build Definition to create the VM Template
 build {
 
-    name    = "ubuntu-server-focal"
-    sources = ["source.proxmox.ubuntu-server-focal"]
+    name    = "debian-server-trixie"
+    sources = ["source.proxmox-iso.debian-server-trixie"]
 
     # Provisioning the VM Template for Cloud-Init Integration in Proxmox #1
     provisioner "shell" {
@@ -133,6 +137,7 @@ build {
             "sudo apt -y autoclean",
             "sudo cloud-init clean",
             "sudo rm -f /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg",
+            "sudo rm -f /etc/netplan/00-installer-config.yaml",
             "sudo sync"
         ]
     }
