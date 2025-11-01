@@ -88,9 +88,10 @@ source "proxmox-iso" "debian-server-trixie" {
     boot_wait    = "10s"
     communicator = "ssh"
     boot_command = [
+        "<esc><wait>",
         "c<wait>",
         "linux /install.amd/vmlinuz auto-install/enable=true priority=critical ",
-        "DEBIAN_FRONTEND=text preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ noprompt<enter>",
+        "DEBIAN_FRONTEND=text preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg noprompt<enter>",
         "initrd /install.amd/initrd.gz<enter>",
         "boot<enter>"
     ]
