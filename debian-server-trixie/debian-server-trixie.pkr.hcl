@@ -32,7 +32,7 @@ source "proxmox-iso" "debian-server-trixie" {
 
     # VM General Settings
     node                 = "proxmox"
-    vm_id                = "403"
+    vm_id                = "402"
     vm_name              = "debian-server-trixie"
     template_description = "Debian Server Trixie Image"
 
