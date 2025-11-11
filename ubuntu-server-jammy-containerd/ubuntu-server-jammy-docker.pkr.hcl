@@ -154,7 +154,12 @@ build {
         inline = [ "sudo cp /tmp/99-pve.cfg /etc/cloud/cloud.cfg.d/99-pve.cfg" ]
     }
 
-    # Provisioning the VM Template with Containerd Installation #4
+    # Fixing the systemd #4
+    provisioner "shell" {
+        inline = [ "sudo fwupdmgr refresh", "sudo systemctl restart fwupd-refresh.service" ]
+    }
+    
+    # Provisioning the VM Template with Full Nerdctl ( Containerd + RunC + CNI ) Installation #5
     provisioner "shell" {
         inline = [
             "wget https://github.com/containerd/nerdctl/releases/download/v2.2.0/nerdctl-full-2.2.0-linux-amd64.tar.gz",
