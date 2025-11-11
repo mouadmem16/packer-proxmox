@@ -13,24 +13,11 @@ autoinstall:
   packages:
     - qemu-guest-agent
     - sudo
-    - uidmap
   storage:
     layout:
       name: direct
     swap:
       size: 0
-  write_files:
-  - path: /etc/systemd/system/user@.service.d/delegate.conf
-    permissions: '0644'
-    content: |
-      # Delegate CPU, CPUSET, IO, Memory, and PIDs controllers to the user slice.
-      [Service]
-      Delegate=cpu cpuset io memory pids
-  runcmd:
-  - 'systemctl daemon-reload'
-  - 'echo "Delegation configured, rebooting in 10 seconds..."'
-  - 'sleep 10'
-  - 'reboot'
   user-data:
     package_upgrade: false
     timezone: africa/casablanca

@@ -154,12 +154,23 @@ build {
         inline = [ "sudo cp /tmp/99-pve.cfg /etc/cloud/cloud.cfg.d/99-pve.cfg" ]
     }
 
-    # Fixing the systemd #4
+    # Fixing the systemd and installing uidmap #4
     provisioner "shell" {
-        inline = [ "sudo fwupdmgr refresh", "sudo systemctl restart fwupd-refresh.service" ]
+        inline = [ "sudo fwupdmgr refresh", "sudo systemctl restart fwupd-refresh.service", "sudo apt update", "sudo apt install -y uidmap" ]
+    }
+
+    # Enabling CPU, CPUSET, and I/O delegation #5
+    provisioner "shell" {
+        inline = [ 
+            "cat /sys/fs/cgroup/user.slice/user-$(id -u).slice/user@$(id -u).service/cgroup.controllers",
+            "sudo mkdir -p /etc/systemd/system/user@.service.d",
+            "echo -e \"[Service]\nDelegate=cpu cpuset io memory pids\" | sudo tee /etc/systemd/system/user@.service.d/delegate.conf",
+            "sudo systemctl daemon-reload",
+            "reboot"
+        ]
     }
     
-    # Provisioning the VM Template with Full Nerdctl ( Containerd + RunC + CNI ) Installation #5
+    # Provisioning the VM Template with Full Nerdctl ( Containerd + RunC + CNI ) Installation #6
     provisioner "shell" {
         inline = [
             "wget https://github.com/containerd/nerdctl/releases/download/v2.2.0/nerdctl-full-2.2.0-linux-amd64.tar.gz",
