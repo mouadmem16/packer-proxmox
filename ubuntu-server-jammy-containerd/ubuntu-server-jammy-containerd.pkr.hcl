@@ -165,16 +165,7 @@ build {
             "cat /sys/fs/cgroup/user.slice/user-$(id -u).slice/user@$(id -u).service/cgroup.controllers",
             "sudo mkdir -p /etc/systemd/system/user@.service.d",
             "echo -e \"[Service]\nDelegate=cpu cpuset io memory pids\" | sudo tee /etc/systemd/system/user@.service.d/delegate.conf",
-            "sudo systemctl daemon-reload",
-            "sudo shutdown -r +1 & disown",
-            "exit 0"
-        ]
-    }
-
-    # This provisioner runs AFTER the reboot and successful reconnect.
-    provisioner "shell" {
-        inline = [
-        "echo 'Provisioning resumed after successful reboot!'"
+            "sudo systemctl daemon-reload"
         ]
     }
     
