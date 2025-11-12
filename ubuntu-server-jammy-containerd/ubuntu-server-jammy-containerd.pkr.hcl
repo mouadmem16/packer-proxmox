@@ -166,7 +166,8 @@ build {
             "sudo mkdir -p /etc/systemd/system/user@.service.d",
             "echo -e \"[Service]\nDelegate=cpu cpuset io memory pids\" | sudo tee /etc/systemd/system/user@.service.d/delegate.conf",
             "sudo systemctl daemon-reload",
-            "reboot"
+            "sudo shutdown -r +1 & disown",
+            "exit 0"
         ]
     }
 
