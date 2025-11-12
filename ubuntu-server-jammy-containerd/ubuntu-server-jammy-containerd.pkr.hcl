@@ -169,6 +169,13 @@ build {
             "reboot"
         ]
     }
+
+    # This provisioner runs AFTER the reboot and successful reconnect.
+    provisioner "shell" {
+        inline = [
+        "echo 'Provisioning resumed after successful reboot!'"
+        ]
+    }
     
     # Provisioning the VM Template with Full Nerdctl ( Containerd + RunC + CNI ) Installation #6
     provisioner "shell" {
