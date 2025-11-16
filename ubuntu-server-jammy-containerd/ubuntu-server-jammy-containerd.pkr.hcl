@@ -17,7 +17,7 @@ variable "proxmox_api_token_secret" {
 }
 
 locals {
-    disk_storage = "data"
+    disk_storage = "local-lvm"
 }
 
 # Resource Definiation for the VM Template
