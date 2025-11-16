@@ -31,7 +31,7 @@ source "proxmox-iso" "ubuntu-server-jammy" {
     insecure_skip_tls_verify = true
 
     # VM General Settings
-    node                 = "proxmox"
+    node                 = "pve"
     vm_id                = "400"
     vm_name              = "ubuntu-server-jammy"
     template_description = "Ubuntu Server Jammy Image"

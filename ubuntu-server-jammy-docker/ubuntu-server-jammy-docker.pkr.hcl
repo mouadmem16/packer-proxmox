@@ -31,7 +31,7 @@ source "proxmox-iso" "ubuntu-server-jammy-docker" {
     insecure_skip_tls_verify = true
 
     # VM General Settings
-    node                 = "proxmox"
+    node                 = "pve"
     vm_id                = "401"
     vm_name              = "ubuntu-server-jammy-docker"
     template_description = "Ubuntu Server Jammy Image with Docker"

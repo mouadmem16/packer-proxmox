@@ -31,7 +31,7 @@ source "proxmox-iso" "ubuntu-server-jammy-containerd" {
     insecure_skip_tls_verify = true
 
     # VM General Settings
-    node                 = "proxmox"
+    node                 = "pve"
     vm_id                = "402"
     vm_name              = "ubuntu-server-jammy-containerd"
     template_description = "Ubuntu Server Jammy Image with Containerd"
